@@ -12,9 +12,12 @@ zkeeper will keep track of iframe page's URL, and add it to the parent page as a
 
 Features:
 
+- Synchronize iframe url as `?page=` query parameter in parent page
+- Synchronize page title
+- Hashchange support
 - Back and forward support (correctly updates query value)
-- Hash link support
 - External links (by comparing origins) and non-html pages/assets load directly (breaks out of the iframe) to avoid security restrictions
+- Auto-breakout if not served from `file:` origin.
 
 Great to use with my `x-include.js` for local documents and documentations.
 
@@ -22,26 +25,29 @@ Great to use with my `x-include.js` for local documents and documentations.
 
 Setup parent page with iframe.
 
+Auto-initialize with `data-frame-src` attribute.
+
 ```html
 <!DOCTYPE html>
 <html><head>
 <title>My Documentations</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="js/zkeeper.js""></script>
-</head>
-<style>
-html,body {
-  margin:0; padding:0;
-  display:grid; min-height:100%;
-}
-iframe {
-  border:0; margin:0; padding:0;
-}
-</style>
-<body>
-  <iframe width="100%" height="100%" data-default-src="files/index.html"></iframe>
-</body>
+<script src="js/zkeeper.js" data-frame-src="files/index.html"></script>
+<body></body>
+</html>
+```
+Alternatively, initialize explicitly.
+
+```html
+<!DOCTYPE html>
+<html><head>
+<title>My Documentations</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="js/zkeeper.js"></script>
+<script>zKeeper("files/index.html")</script>
+<body></body>
 </html>
 ```
 
@@ -50,6 +56,7 @@ For each page.
 ```html
 <!DOCTYPE html>
 <html><head>
+<title>Documentation Index</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="js/zkeeper.js""></script>
