@@ -1,7 +1,7 @@
 ﻿/*
-Zoom Keeper v1.0
+Zoom Keeper v1.1
 -----------
-Use iframe to retain zoom level cross domain (ex. local files)
+Use iframe to retain zoom level for local files
 https://github.com/miragecraft/zkeeper/
 */
 (() => {
@@ -10,12 +10,15 @@ https://github.com/miragecraft/zkeeper/
   if (isInIframe) {
     // Client Code
 
-    // Function to sync current URL with parent
-    const syncWithParent = () =>
-      window.parent.postMessage({ page: window.location.href }, "*");
+    // Function to sync current URL and title with parent
+    const syncWithParent = () => 
+      window.parent.postMessage({ page: window.location.href, title: document.title }, "*");
+
+    // Monitor title change
+    new MutationObserver(syncWithParent).observe(document.querySelector('title'),{ childList: true });
 
     // Listen for load and hashchange events
-    ["load", "hashchange"].forEach(eventType =>
+    ["DOMContentLoaded", "hashchange"].forEach(eventType =>
       window.addEventListener(eventType, syncWithParent)
     );
 
@@ -38,8 +41,21 @@ https://github.com/miragecraft/zkeeper/
         event.preventDefault();
       }
     });
-  } else {
-    // Host Code
+
+    return;
+  }
+
+  // Host Code
+  const frameSrc = document.currentScript.getAttribute("data-frame-src");
+
+  window.zKeeper = (frameSrc) => {
+   // Check if the page is served from the file protocol
+    if (window.location.protocol !== "file:") {
+      window.location.href = frameSrc;
+      return;
+    }
+
+    let ownTitle = document.title;
 
     // Helper function to compute a relative URL from base to target
     const getRelativePath = (base, target) => {
@@ -73,14 +89,33 @@ https://github.com/miragecraft/zkeeper/
       const relative = getRelativePath(baseUrl, targetUrl);
       const query = encodeURIComponent(relative);
       history.replaceState({ query }, "", `?page=${query}`);
+
+      // Update parent page title
+      document.title = event.data.title ?? ownTitle;
     });
 
-    // On ready, set the iframe source based on query parameter or default
+    // On ready, initialize iframe with source based on query parameter or default
     window.addEventListener("DOMContentLoaded", () => {
-      const iframe = document.querySelector("iframe");
       const params = new URLSearchParams(window.location.search);
-      const page = params.get("page") || iframe.dataset.defaultSrc;
-      iframe.src = page;
+      const page = params.get("page") || frameSrc;
+
+      // Add styles and iframe to the document
+      document.head.insertAdjacentHTML("beforeend", `
+        <style>
+          html, body, iframe {
+            border: 0; margin: 0; padding: 0;
+            display: grid;
+            width: 100%; height: 100%; 
+          }
+        </style>
+      `);
+
+      document.body.insertAdjacentHTML("beforeend", `
+        <iframe src="${page}"></iframe>
+      `);
     });
   }
+
+  // Auto-initialize
+  if (frameSrc) window.zKeeper(frameSrc);
 })();
