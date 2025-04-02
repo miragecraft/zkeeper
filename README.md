@@ -25,28 +25,18 @@ Great to use with my `x-include.js` for local documents and documentations.
 
 Setup parent page with iframe.
 
-Auto-initialize with `data-frame-src` attribute.
-
 ```html
 <!DOCTYPE html>
 <html><head>
 <title>My Documentations</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Auto initialize with data attribute -->
 <script src="js/zkeeper.js" data-frame-src="files/index.html"></script>
-<body></body>
-</html>
-```
-Alternatively, initialize explicitly.
-
-```html
-<!DOCTYPE html>
-<html><head>
-<title>My Documentations</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Manual initialize
 <script src="js/zkeeper.js"></script>
 <script>zKeeper("files/index.html")</script>
+-->
 <body></body>
 </html>
 ```
