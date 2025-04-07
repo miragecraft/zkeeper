@@ -75,7 +75,6 @@ https://github.com/miragecraft/zkeeper/
         return;
       }
       if (isNonHtml) {
-        console.log("nonhtml")
         window.parent.postMessage(
           { page: targetUrl.href },
           "*"
@@ -186,7 +185,6 @@ https://github.com/miragecraft/zkeeper/
       iframe.addEventListener("load", () => {
         // If it was a reload and scroll param exists, send it to iframe
         const navEntries = performance.getEntriesByType("navigation");
-        console.log(navEntries[0].type);
         if (navEntries.length && navEntries[0].type === "reload" && !isNaN(savedScroll)) {
           iframe.contentWindow.postMessage({ restoreScrollY: savedScroll }, "*");
 
