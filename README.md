@@ -14,6 +14,7 @@ Features:
 
 - Synchronize iframe url as `?page=` query parameter in parent page
 - Synchronize page title
+- Save scroll position
 - Hashchange support
 - Back and forward support (correctly updates query value)
 - External links load in new tab/window to avoid security restrictions
