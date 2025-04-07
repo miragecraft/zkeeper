@@ -16,10 +16,14 @@ Features:
 - Synchronize page title
 - Hashchange support
 - Back and forward support (correctly updates query value)
-- External links (by comparing origins) and non-html pages/assets load directly (breaks out of the iframe) to avoid security restrictions
+- External links load in new tab/window to avoid security restrictions
 - Auto-breakout if not served from `file:` origin.
 
 Great to use with my `x-include.js` for local documents and documentations.
+
+Limitation:
+
+Chrome will forget history states when navigate away from the parent page, this is why external link opens in new tab/window.
 
 ## How to use:
 
