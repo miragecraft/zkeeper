@@ -39,7 +39,6 @@ https://github.com/miragecraft/zkeeper/
       const y = window.scrollY;
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
-        console.log("scroll: "+y)
         window.parent.postMessage({ scrollY: y }, "*");
       }, debounce);
     });
